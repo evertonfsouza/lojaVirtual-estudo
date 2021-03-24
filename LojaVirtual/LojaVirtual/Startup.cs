@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using LojaVirtual.Database;
+﻿using LojaVirtual.Database;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore.SqlServer;
 using Microsoft.EntityFrameworkCore;
 using LojaVirtual.Repositories;
 using LojaVirtual.Repositories.Contracts;
@@ -28,7 +21,6 @@ using WSCorreios;
 using LojaVirtual.Libraries.Gerenciador.Pagamento.PagarMe;
 using Coravel;
 using LojaVirtual.Libraries.Gerenciador.Scheduler.Invocable;
-using Microsoft.EntityFrameworkCore;
 
 namespace LojaVirtual
 {
@@ -117,7 +109,6 @@ namespace LojaVirtual
             {
                 options.ModelBindingMessageProvider.SetValueMustNotBeNullAccessor(x => "O campo deve ser preenchido!");
             })
-            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
             .AddSessionStateTempDataProvider();
 
             services.AddSession(options =>
@@ -158,6 +149,7 @@ namespace LojaVirtual
             app.UseHttpsRedirection();
             app.UseDefaultFiles();
             app.UseStaticFiles();
+            app.UseRouting();
             app.UseCookiePolicy();
             app.UseSession();
             app.UseMiddleware<ValidateAntiForgeryTokenMiddleware>();
@@ -171,15 +163,16 @@ namespace LojaVirtual
              * https://www.site.com.br -> https://www.site.com.br/Home/Index
              * https://www.site.com.br/Produto -> https://www.site.com.br/Produto/Index
              */
-            app.UseMvc(routes =>
+            app.UseEndpoints(endpoint =>
             {
-                routes.MapRoute(
+                endpoint.MapControllerRoute(
                     name: "areas",
-                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
                   );
-                routes.MapRoute(
+                endpoint.MapControllerRoute
+                (
                     name: "default",
-                    template: "/{controller=Home}/{action=Index}/{id?}");
+                    pattern: "/{controller=Home}/{action=Index}/{id?}");
             });
 
             /*

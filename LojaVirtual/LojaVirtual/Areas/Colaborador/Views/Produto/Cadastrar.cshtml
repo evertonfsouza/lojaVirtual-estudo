@@ -21,7 +21,7 @@
             <span asp-validation-for="Nome" class="text-danger"></span>
         </div>
     </div>
-    
+
     <div class="form-group">
         <label asp-for="Descricao"></label>
         <textarea asp-for="Descricao" class="form-control"></textarea>
@@ -52,7 +52,7 @@
             <span asp-validation-for="Valor" class="text-danger"></span>
         </div>
     </div>
-    
+
 
     <h2>Frete</h2>
 
@@ -100,7 +100,7 @@
         </div>
     </div>
 
-    @{ 
+    @{
         List<Imagem> Imagens = new List<Imagem>();
         if (Model != null)
         {
@@ -133,6 +133,7 @@
                 </div>
             }
         }
+
     </div>
 
 
